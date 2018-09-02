@@ -10,28 +10,36 @@
       v-bind:report="currentReport"/>
     
     <CreateReportModal/>
+    <add-action-modal/>
 
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+
 import ReportList from './components/ReportList.vue'
 import ReportDetail from './components/ReportDetail.vue'
 import CreateReportModal from './components/modals/CreateReportModal.vue'
+import AddActionModal from './components/modals/AddActionModal.vue'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     ReportList,
     ReportDetail,
-    CreateReportModal
+    CreateReportModal,
+    AddActionModal
   },
   mounted: function () {
+    // Global event mapping
+    Vue.EventBus.$on('create-report', this.createReport)
+
     // ReportList initialize
     if (localStorage) {
       let reportList = JSON.parse(localStorage.getItem('malifaux-report-tool.report-list'))
       this.reportList = reportList && typeof reportList === 'Array' ? reportList : []
-      console.log(this.reportList, this.reportList.length)
+      // console.log(this.reportList, this.reportList.length)
     }
   },
   data: function () {
@@ -41,8 +49,15 @@ export default {
     }
   },
   methods: {
-    createReport: function () {
-      console.log('App.createReport()')
+    createReport: function (params) {
+      console.log('App.createReport()', params)
+
+      this.currentReport = {
+        recorder: params.discord_id,
+        crew_recorder: params.crew_thisside,
+        crew_opponent: params.crew_opponent,
+        history: [{}]
+      }
     }
   }
 }

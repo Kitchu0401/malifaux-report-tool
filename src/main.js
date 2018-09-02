@@ -10,7 +10,7 @@ import VueOnsen from 'vue-onsenui';
 import App from './App.vue'
 import './registerServiceWorker'
 
-Vue.prototype.EventBus = new Vue()
+Vue.EventBus = new Vue()
 Vue.config.productionTip = false
 
 Vue.use(VueOnsen);

@@ -4,12 +4,17 @@
 
     <!-- Toolbar -->
     <v-ons-toolbar>
-      <div class="center">
+      <div class="left">
+        <v-ons-toolbar-button>
+          <v-ons-icon icon="md-menu" size="32px"></v-ons-icon>
+        </v-ons-toolbar-button>
+      </div>
+      <div class="center" style="text-align: center;">
         Report List Page
       </div>
       <div class="right">
         <v-ons-toolbar-button>
-          <v-ons-icon icon="ion-navicon, material: md-plus" v-on:click="callCreateReportModal"></v-ons-icon>
+          <v-ons-icon icon="md-plus" size="32px" v-on:click="callCreateReportModal"></v-ons-icon>
         </v-ons-toolbar-button>
       </div>
     </v-ons-toolbar>
@@ -24,6 +29,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'ReportList',
   props: {
@@ -31,7 +38,7 @@ export default {
   },
   methods: {
     callCreateReportModal: function () {
-      this.$Vue.EventBus.$emit('open-modal-create-report')
+      Vue.EventBus.$emit('open-modal-create-report')
     }
   }
 }
