@@ -34,6 +34,12 @@
     <v-ons-fab position="bottom right" v-on:click="callAddActionModal">
       <v-ons-icon icon="md-plus"></v-ons-icon>
     </v-ons-fab>
+
+    <AddActionModal
+      :addActionToHistory="addActionToHistory"
+      :moveNextRound="moveNextRound"
+      :crew_yours="reportDetail.crew_yours"
+      :crew_their="reportDetail.crew_their"/>
   
   </v-ons-page>
 
@@ -42,14 +48,41 @@
 <script>
 import Vue from 'vue'
 
+import AddActionModal from './modals/AddActionModal.vue'
+
 export default {
   name: 'ReportDetail',
+  components: {
+    AddActionModal
+  },
   props: {
-    reportDetail: Object
+    reportDetail: Object,
   },
   methods: {
     callAddActionModal: function () {
       Vue.EventBus.$emit('open-modal-add-action')
+    },
+    addActionToHistory: function (action) {
+      // console.log('ReportDetail.addActionToHistory()', action)
+
+      let message = [
+        `${action.source.name} took`,
+        ` ${action.action.name} action`,
+        `${action.target ? ' to ' + action.target.name : ''}`,
+        `${action.action.result ? ', dealing ' + action.resultAmount + ' dmamage.' : '.'}`,
+      ].join('')
+      
+      console.log(message)
+
+      // Expected
+      // - source: String - model declaring action
+      // - target: String - model targeted by action
+      // - resultType: String|Symbol - type of result (damage, healing)
+      // - resultAmount: Integer - amount of result (etc: modified wound)
+    },
+    moveNextRound: function () {
+      console.log('ReportDetail.moveNextRound()', action)
+
     }
   }
 }

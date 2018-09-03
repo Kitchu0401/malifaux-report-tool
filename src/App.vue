@@ -3,13 +3,11 @@
 
     <ReportList
       v-if="!currentReport"
-      v-bind:reportList="reportList"/>
+      :reportList="reportList"/>
 
     <ReportDetail
       v-if="currentReport"
-      v-bind:report="currentReport"/>
-    
-    <CreateReportModal/>
+      :reportDetail="currentReport"/>
     <add-action-modal/>
 
   </div>
@@ -20,16 +18,12 @@ import Vue from 'vue'
 
 import ReportList from './components/ReportList.vue'
 import ReportDetail from './components/ReportDetail.vue'
-import CreateReportModal from './components/modals/CreateReportModal.vue'
-import AddActionModal from './components/modals/AddActionModal.vue'
 
 export default {
   name: 'App',
   components: {
     ReportList,
-    ReportDetail,
-    CreateReportModal,
-    AddActionModal
+    ReportDetail
   },
   mounted: function () {
     // Global event mapping
@@ -54,8 +48,8 @@ export default {
 
       this.currentReport = {
         recorder: params.discord_id,
-        crew_recorder: params.crew_thisside,
-        crew_opponent: params.crew_opponent,
+        crew_yours: params.crew_thisside,
+        crew_their: params.crew_opponent,
         history: [{}]
       }
     }

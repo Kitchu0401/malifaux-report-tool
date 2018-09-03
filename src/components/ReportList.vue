@@ -23,6 +23,8 @@
       <!-- <v-ons-list-header>Default</v-ons-list-header> -->
       <v-ons-list-item v-for="(report, index) in reportList" :key="index" :report="report"></v-ons-list-item>
     </v-ons-list>
+    
+    <CreateReportModal/>
   
   </v-ons-page>
 
@@ -31,8 +33,13 @@
 <script>
 import Vue from 'vue'
 
+import CreateReportModal from './modals/CreateReportModal.vue'
+
 export default {
   name: 'ReportList',
+  components: {
+    CreateReportModal
+  },
   props: {
     reportList: Array
   },
