@@ -6,7 +6,7 @@
     <v-ons-toolbar>
       <div class="left"><v-ons-toolbar-button>Menu</v-ons-toolbar-button></div>
       <div class="center" style="text-align: center;">Report List Page</div>
-      <div class="right"><v-ons-toolbar-button>New</v-ons-toolbar-button></div>
+      <div class="right"><v-ons-toolbar-button @click="callCreateReportModal">New</v-ons-toolbar-button></div>
     </v-ons-toolbar>
 
     <v-ons-list>

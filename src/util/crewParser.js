@@ -46,7 +46,7 @@ function addActions () {
     },
     {
       name: 'Charge',
-      target: ['Friendly', 'Opponent'],
+      target: ['Opponent'],
       result: 'Damage'
     },
     {
