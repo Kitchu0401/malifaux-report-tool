@@ -9,21 +9,27 @@
     <section style="padding: 8px">
       <v-ons-list>
         <v-ons-list-item style="padding: 0px;">
-          <v-ons-input 
-            style="width: 100%;"
+          <label for="discord-id">Discord ID</label>
+          <v-ons-input
+            input-id="discord-id"
             placeholder="Discord ID"
+            style="width: 100%;"
             v-model="discord_id"/>
         </v-ons-list-item>
         <v-ons-list-item style="padding: 0px;">
+          <label for="discord-id">Your crew</label>
           <textarea
-            class="textarea" rows="5" style="width: 100%;"
+            input-id="crew_yours"
             placeholder="Your crew"
+            class="textarea" rows="5" style="width: 100%;"
             v-model="crew_thisside"/>
         </v-ons-list-item>
         <v-ons-list-item style="padding: 0px;">
+          <label for="discord-id">Opponent`s crew</label>
           <textarea
-            class="textarea" rows="5" style="width: 100%;"
+            input-id="crew_their"
             placeholder="Their crew"
+            class="textarea" rows="5" style="width: 100%;"
             v-model="crew_opponent"/>
         </v-ons-list-item>
 

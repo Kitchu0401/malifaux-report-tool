@@ -5,8 +5,6 @@
     :visible.sync="visible">
 
     <section style="padding: 8px;">
-      <p style="text-align: center;">{{ stepIndex }}<p/>
-
       <!-- Fixed list items -->
       <v-ons-list v-if="stepIndex === 0">
         <v-ons-list-item modifier="nodivider">
@@ -16,7 +14,7 @@
           <v-ons-button modifier="large" style="margin: 0px;" @click="select('crew_their')">Add their action</v-ons-button>
         </v-ons-list-item>
         <v-ons-list-item modifier="nodivider">
-          <v-ons-button modifier="large" style="margin: 0px;" @click="moveNextRound()">Next Round</v-ons-button>
+          <v-ons-button modifier="large" style="margin: 0px;" @click="clickNextRound()">Next Round</v-ons-button>
         </v-ons-list-item>
       </v-ons-list>
 
@@ -38,25 +36,12 @@
 <script>
 import Vue from 'vue'
 
-const STEPS = [
-  Symbol('Side'),
-  Symbol('Source'),
-  Symbol('Action'),
-  Symbol('Target'),
-  Symbol('Result')
-]
-
-const defaultItems = [
-  {
-    
-  }
-]
-
 export default {
   name: 'AddActionModal',
   props: {
-    addActionToHistory: Function,
-    moveNextRound: Function,
+    addAction: Function,
+    nextRound: Function,
+    currentRoundIndex: Number,
     crew_yours: Object,
     crew_their: Object
   },
@@ -79,10 +64,7 @@ export default {
       this.visible = true
     },
     select: function (selected) {
-      console.log('AddActionModal.select()', selected)
-
       switch (this.stepIndex) {
-
         // Selecting side
         // - selected: String 'crew_yours'|'crew_theirs'
         case 0:
@@ -116,7 +98,7 @@ export default {
             this.stepSelections = selected.target
               .filter(t => t === 'Friendly' || t === 'Opponent')
               .reduce((arr, t) => arr.concat(t === 'Friendly'
-                ? this.action.side === 'crew_yours' ? this['crew_yours'].modelList : this['crew_theirs'].modelList
+                ? this.action.side === 'crew_yours' ? this['crew_yours'].modelList : this['crew_their'].modelList
                 : this.action.side === 'crew_yours' ? this['crew_their'].modelList : this['crew_yours'].modelList), [])
           }
           break;
@@ -140,7 +122,7 @@ export default {
         // - selected: Integer 1-10
         case 4:
           this.action.resultAmount = selected
-          this.addAction()
+          this.clickAddAction()
           break;
       
         default:
@@ -148,8 +130,12 @@ export default {
           return;
       }
     },
-    addAction: function () {
-      this.addActionToHistory(this.action)
+    clickAddAction: function () {
+      this.addAction(this.currentRoundIndex, this.action)
+      this.visible = false
+    },
+    clickNextRound: function () {
+      this.nextRound()
       this.visible = false
     }
   }

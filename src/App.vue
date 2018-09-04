@@ -3,10 +3,13 @@
 
     <ReportList
       v-if="!currentReport"
+      :viewReport="viewReport"
       :reportList="reportList"/>
 
     <ReportDetail
       v-if="currentReport"
+      :openListPage="openListPage"
+      :saveReport="saveReport"
       :reportDetail="currentReport"/>
     <add-action-modal/>
 
@@ -32,8 +35,8 @@ export default {
     // ReportList initialize
     if (localStorage) {
       let reportList = JSON.parse(localStorage.getItem('malifaux-report-tool.report-list'))
-      this.reportList = reportList && typeof reportList === 'Array' ? reportList : []
-      // console.log(this.reportList, this.reportList.length)
+      this.reportList = Array.isArray(reportList) ? reportList : []
+      console.log('Found saved report lists:', this.reportList)
     }
   },
   data: function () {
@@ -43,15 +46,30 @@ export default {
     }
   },
   methods: {
+    openListPage: function () {
+      this.currentReport = null
+    },
     createReport: function (params) {
-      console.log('App.createReport()', params)
-
       this.currentReport = {
         recorder: params.discord_id,
         crew_yours: params.crew_thisside,
         crew_their: params.crew_opponent,
-        history: [{}]
+        history: [[]],
+        created: null
       }
+    },
+    viewReport: function (report) {
+      this.currentReport = report
+    },
+    saveReport: function () {
+      this.currentReport.created = new Date().getTime()
+      this.reportList.push(this.currentReport)
+
+      if (localStorage) {
+        localStorage.setItem('malifaux-report-tool.report-list', JSON.stringify(this.reportList))
+      }
+
+      this.openListPage()
     }
   }
 }

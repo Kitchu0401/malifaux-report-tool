@@ -4,40 +4,39 @@
 
     <!-- Toolbar -->
     <v-ons-toolbar>
-      <!--
-      <div class="left">
-        <v-ons-toolbar-button>
-          <v-ons-icon icon="md-menu" size="32px"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div>
-      -->
-      <div class="center" style="text-align: center;">
-        Report Detail Page
-      </div>
-      <!--
-      <div class="right">
-        <v-ons-toolbar-button>
-          <v-ons-icon icon="md-plus" size="32px" v-on:click="callCreateReportModal"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div>
-      -->
+      <div class="left"><v-ons-toolbar-button @click="openListPage">Back</v-ons-toolbar-button></div>
+      <div class="center" style="text-align: center;">Round {{ currentRoundIndex + 1 }}</div>
+      <div class="right"><v-ons-toolbar-button v-if="editable" @click="saveReport">Save</v-ons-toolbar-button></div>
     </v-ons-toolbar>
 
-    <!-- History -->
-    <v-ons-list>
-      <!--
-      <v-ons-list-item v-for="(report, index) in reportList" :key="index" :report="report"></v-ons-list-item>
-      -->
-    </v-ons-list>
+    <!-- History: Carousel -->
+    <v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="currentRoundIndex">
+      <v-ons-carousel-item v-for="(round, roundIndex) in reportDetail.history" :key="roundIndex" :style="{backgroundColor: '#fff'}">
+
+        <report-history :round="round"/>
+
+      </v-ons-carousel-item>
+    </v-ons-carousel>
+
+    <!-- History: Carousel - dots navigator -->
+    <div class="dots">
+      <span v-for="roundIndex in reportDetail.history.length" :key="roundIndex" :index="roundIndex - 1" @click="currentRoundIndex = roundIndex - 1">
+        {{ currentRoundIndex === roundIndex - 1 ? '\u25CF' : '\u25CB' }}
+      </span>
+    </div>
 
     <!-- Action Fab -->
-    <v-ons-fab position="bottom right" v-on:click="callAddActionModal">
+    <v-ons-fab
+        position="bottom right"
+        v-if="editable"
+        v-on:click="callAddActionModal">
       <v-ons-icon icon="md-plus"></v-ons-icon>
     </v-ons-fab>
 
     <AddActionModal
-      :addActionToHistory="addActionToHistory"
-      :moveNextRound="moveNextRound"
+      :addAction="addAction"
+      :nextRound="nextRound"
+      :currentRoundIndex="currentRoundIndex"
       :crew_yours="reportDetail.crew_yours"
       :crew_their="reportDetail.crew_their"/>
   
@@ -48,46 +47,56 @@
 <script>
 import Vue from 'vue'
 
+import ReportHistory from './ReportHistory.vue'
 import AddActionModal from './modals/AddActionModal.vue'
 
 export default {
   name: 'ReportDetail',
   components: {
+    ReportHistory,
     AddActionModal
   },
   props: {
-    reportDetail: Object,
+    openListPage: Function,
+    saveReport: Function,
+    reportDetail: Object
+  },
+  data: function () {
+    return {
+      currentRoundIndex: 0
+    }
+  },
+  computed: {
+    editable: function () {
+      return this.reportDetail.created === null
+    }
   },
   methods: {
     callAddActionModal: function () {
       Vue.EventBus.$emit('open-modal-add-action')
     },
-    addActionToHistory: function (action) {
-      // console.log('ReportDetail.addActionToHistory()', action)
-
-      let message = [
-        `${action.source.name} took`,
-        ` ${action.action.name} action`,
-        `${action.target ? ' to ' + action.target.name : ''}`,
-        `${action.action.result ? ', dealing ' + action.resultAmount + ' dmamage.' : '.'}`,
-      ].join('')
-      
-      console.log(message)
-
-      // Expected
-      // - source: String - model declaring action
-      // - target: String - model targeted by action
-      // - resultType: String|Symbol - type of result (damage, healing)
-      // - resultAmount: Integer - amount of result (etc: modified wound)
+    addAction: function (currentRoundIndex, action) {
+      this.reportDetail.history[currentRoundIndex].push(action)
     },
-    moveNextRound: function () {
-      console.log('ReportDetail.moveNextRound()', action)
-
+    nextRound: function () {
+      this.reportDetail.history.push([])
     }
   }
 }
 </script>
 
 <style scoped>
+.dots {
+  text-align: center;
+  font-size: 30px;
+  color: #aaa;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+}
 
+.dots span {
+  cursor: pointer;
+}
 </style>
