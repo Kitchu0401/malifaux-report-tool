@@ -33,7 +33,7 @@
       <v-ons-icon icon="md-plus"></v-ons-icon>
     </v-ons-fab>
 
-    <AddActionModal
+    <action-modal
       :addAction="addAction"
       :nextRound="nextRound"
       :currentRoundIndex="currentRoundIndex"
@@ -48,13 +48,13 @@
 import Vue from 'vue'
 
 import ReportHistory from './ReportHistory.vue'
-import AddActionModal from './modals/AddActionModal.vue'
+import ActionModal from './modals/ActionModal.vue'
 
 export default {
   name: 'ReportDetail',
   components: {
     ReportHistory,
-    AddActionModal
+    ActionModal
   },
   props: {
     openListPage: Function,

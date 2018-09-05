@@ -41,28 +41,34 @@ function addActions () {
   return [
     {
       name: 'Attack',
+      type: 'Common',
       target: ['Opponent'],
       result: 'Damage'
     },
     {
       name: 'Charge',
+      type: 'Common',
       target: ['Opponent'],
       result: 'Damage'
     },
     {
       name: 'Walk',
+      type: 'Common',
       target: []
     },
     {
       name: 'Defensive',
+      type: 'Common',
       target: []
     },
     {
       name: 'Focus',
+      type: 'Common',
       target: []
     },
     {
       name: 'Interact',
+      type: 'Common',
       target: ['Friendly', 'Opponent']
     }
   ]

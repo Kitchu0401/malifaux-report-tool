@@ -17,16 +17,35 @@
           <v-ons-button modifier="large" style="margin: 0px;" @click="clickNextRound()">Next Round</v-ons-button>
         </v-ons-list-item>
       </v-ons-list>
-
+      
       <!-- Dynamic list items -->
-      <v-ons-list v-if="stepIndex !== 0">
-        <v-ons-list-item 
-            modifier="nodivider"
-            v-for="(selection, key) in stepSelections"
-            :key="key" :selection="selection">
-          <v-ons-button modifier="large" style="margin: 0px;" @click="select(selection)">{{ selection.name || selection }}</v-ons-button>
-        </v-ons-list-item>
-      </v-ons-list>
+      <!-- [1] Source -->
+      <action-source-selector
+        v-if="stepIndex === 1"
+        :select="select"
+        :action="action"
+        :crew_yours="crew_yours"
+        :crew_their="crew_their"/>
+
+      <!-- [2] Action -->
+      <action-action-selector
+        v-if="stepIndex === 2"
+        :select="select"
+        :action="action"/>
+
+      <!-- [3] Target -->
+      <action-target-selector
+        v-if="stepIndex === 3"
+        :select="select"
+        :action="action"
+        :crew_yours="crew_yours"
+        :crew_their="crew_their"/>
+
+      <!-- [4] Result -->
+      <action-result-selector
+        v-if="stepIndex === 4"
+        :select="select"
+        :action="action"/>
     </section>
     
   </v-ons-dialog>
@@ -36,8 +55,19 @@
 <script>
 import Vue from 'vue'
 
+import ActionSourceSelector from './ActionSourceSelector.vue'
+import ActionActionSelector from './ActionActionSelector.vue'
+import ActionTargetSelector from './ActionTargetSelector.vue'
+import ActionResultSelector from './ActionResultSelector.vue'
+
 export default {
-  name: 'AddActionModal',
+  name: 'ActionModal',
+  components: {
+    ActionSourceSelector,
+    ActionActionSelector,
+    ActionTargetSelector,
+    ActionResultSelector
+  },
   props: {
     addAction: Function,
     nextRound: Function,
@@ -66,12 +96,11 @@ export default {
     select: function (selected) {
       switch (this.stepIndex) {
         // Selecting side
-        // - selected: String 'crew_yours'|'crew_theirs'
+        // - selected: String 'crew_yours'|'crew_their'
         case 0:
           this.action.side = selected
           this.stepIndex++
 
-          this.stepSelections = this[selected].modelList
           break;
 
         // Selecting source model
@@ -80,7 +109,6 @@ export default {
           this.action.source = selected
           this.stepIndex++
 
-          this.stepSelections = selected.actions
           break;
 
         // Selecting performed action
@@ -94,13 +122,8 @@ export default {
           if (this.action.action.target.length <= 0) {
             this.stepIndex++
             this.select()
-          } else {
-            this.stepSelections = selected.target
-              .filter(t => t === 'Friendly' || t === 'Opponent')
-              .reduce((arr, t) => arr.concat(t === 'Friendly'
-                ? this.action.side === 'crew_yours' ? this['crew_yours'].modelList : this['crew_their'].modelList
-                : this.action.side === 'crew_yours' ? this['crew_their'].modelList : this['crew_yours'].modelList), [])
           }
+
           break;
 
         // Selecting action`s target
@@ -113,9 +136,8 @@ export default {
           if (this.action.action.result === undefined) {
             this.stepIndex++
             this.select()
-          } else {
-            this.stepSelections = [1,2,3,4,5,6,7,8,9,10]
           }
+
           break;
 
         // Selecting action`s result
