@@ -68,7 +68,8 @@ export default {
   },
   computed: {
     editable: function () {
-      return this.reportDetail.created === null
+      // return this.reportDetail.created === null
+      return true
     }
   },
   methods: {

@@ -11,14 +11,11 @@
 
     <v-ons-list>
       <!-- <v-ons-list-header>Default</v-ons-list-header> -->
-      <v-ons-list-item v-for="(report, index) in reportList" :key="index" @click="viewReport(report)">
-        <span class="list-item__title"><strong v-once v-text="report.recorder"/></span>
-        <span class="list-item__subtitle">
-          <strong v-once v-text="report.crew_yours.crewName"/>
-          <span> vs </span>
-          <strong v-once v-text="report.crew_their.crewName"/>
-        </span>
-      </v-ons-list-item>
+      <report-list-item
+        v-for="(report, index) in reportList" :key="index"
+        :viewReport="viewReport"
+        :deleteReport="deleteReport"
+        :report="report"/>
     </v-ons-list>
     
     <CreateReportModal/>
@@ -29,16 +26,20 @@
 
 <script>
 import Vue from 'vue'
+import moment from 'moment'
 
+import ReportListItem from './ReportListItem.vue'
 import CreateReportModal from './modals/CreateReportModal.vue'
 
 export default {
   name: 'ReportList',
   components: {
+    ReportListItem,
     CreateReportModal
   },
   props: {
     viewReport: Function,
+    deleteReport: Function,
     reportList: Array
   },
   methods: {

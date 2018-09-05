@@ -4,6 +4,7 @@
     <ReportList
       v-if="!currentReport"
       :viewReport="viewReport"
+      :deleteReport="deleteReport"
       :reportList="reportList"/>
 
     <ReportDetail
@@ -36,6 +37,7 @@ export default {
     if (localStorage) {
       let reportList = JSON.parse(localStorage.getItem('malifaux-report-tool.report-list'))
       this.reportList = Array.isArray(reportList) ? reportList : []
+      
       console.log('Found saved report lists:', this.reportList)
     }
   },
@@ -49,27 +51,52 @@ export default {
     openListPage: function () {
       this.currentReport = null
     },
+    openDetailPage: function (report) {
+      this.currentReport = report
+    },
     createReport: function (params) {
-      this.currentReport = {
+      this.openDetailPage({
         recorder: params.discord_id,
         crew_yours: params.crew_thisside,
         crew_their: params.crew_opponent,
         history: [[]],
         created: null
-      }
+      })
     },
     viewReport: function (report) {
-      this.currentReport = report
+      this.openDetailPage(report)
     },
     saveReport: function () {
+      let savingNewReport = this.currentReport.created === null
       this.currentReport.created = new Date().getTime()
-      this.reportList.push(this.currentReport)
 
-      if (localStorage) {
-        localStorage.setItem('malifaux-report-tool.report-list', JSON.stringify(this.reportList))
+      // Create new report
+      if (savingNewReport) {
+        this.reportList.push(this.currentReport)
+      }
+      // Update existing report
+      else {
+        let reportIndex = this.reportList.indexOf(this.currentReport)
+        this.reportList.splice(reportIndex, 1, this.currentReport)
       }
 
+      this.syncStorage()
       this.openListPage()
+    },
+    deleteReport: function (report) {
+      this.$ons.notification.confirm('Delete selected report?')
+        .then(confirmed => {
+          if (confirmed) {
+            let reportIndex = this.reportList.indexOf(report)
+            this.reportList.splice(reportIndex, 1)
+
+            this.syncStorage()
+          }
+        })
+    },
+    syncStorage: function () {
+      this.reportList.sort((prev, next) => prev.created < next.created )
+      localStorage && localStorage.setItem('malifaux-report-tool.report-list', JSON.stringify(this.reportList))
     }
   }
 }
