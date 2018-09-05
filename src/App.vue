@@ -80,6 +80,8 @@ export default {
         this.reportList.splice(reportIndex, 1, this.currentReport)
       }
 
+      this.$ons.notification.toast('Successfully saved.', { timeout: 2500 })
+
       this.syncStorage()
       this.openListPage()
     },
@@ -89,6 +91,8 @@ export default {
           if (confirmed) {
             let reportIndex = this.reportList.indexOf(report)
             this.reportList.splice(reportIndex, 1)
+
+            this.$ons.notification.toast('Successfully deleted.', { timeout: 2500 })
 
             this.syncStorage()
           }

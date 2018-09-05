@@ -57,6 +57,11 @@ function addActions () {
       target: []
     },
     {
+      name: 'Interact',
+      type: 'Common',
+      target: ['Friendly', 'Opponent']
+    },
+    {
       name: 'Defensive',
       type: 'Common',
       target: []
@@ -65,11 +70,6 @@ function addActions () {
       name: 'Focus',
       type: 'Common',
       target: []
-    },
-    {
-      name: 'Interact',
-      type: 'Common',
-      target: ['Friendly', 'Opponent']
     }
   ]
 }

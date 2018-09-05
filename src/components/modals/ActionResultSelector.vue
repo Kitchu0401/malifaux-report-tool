@@ -1,6 +1,6 @@
 <template>
 
-  <v-ons-list>
+  <acticle>
     <v-ons-row>
       <v-ons-col>
         <v-ons-list>
@@ -27,7 +27,7 @@
         </v-ons-list>
       </v-ons-col>
     </v-ons-row>
-  </v-ons-list>
+  </acticle>
 
 </template>
 
@@ -35,7 +35,7 @@
 import Vue from 'vue'
 
 export default {
-  name: 'ActionActionSelector',
+  name: 'ActionResultSelector',
   props: {
     select: Function,
     action: Object
