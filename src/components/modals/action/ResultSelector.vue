@@ -1,6 +1,6 @@
 <template>
 
-  <acticle>
+  <article>
     <v-ons-row>
       <v-ons-col>
         <v-ons-list>
@@ -27,7 +27,7 @@
         </v-ons-list>
       </v-ons-col>
     </v-ons-row>
-  </acticle>
+  </article>
 
 </template>
 

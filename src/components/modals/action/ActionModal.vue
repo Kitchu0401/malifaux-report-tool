@@ -20,7 +20,7 @@
       
       <!-- Dynamic list items -->
       <!-- [1] Source -->
-      <action-source-selector
+      <source-selector
         v-if="stepIndex === 1"
         :select="select"
         :action="action"
@@ -28,13 +28,19 @@
         :crew_their="crew_their"/>
 
       <!-- [2] Action -->
-      <action-action-selector
+      <action-selector
         v-if="stepIndex === 2"
+        :showCustomAction="showCustomAction"
         :select="select"
         :action="action"/>
 
+      <!-- [2-1] Custom action  -->
+      <custom-action-selector
+        v-if="stepIndex === 2.1"
+        :addCustomAction="addCustomAction"/>
+
       <!-- [3] Target -->
-      <action-target-selector
+      <target-selector
         v-if="stepIndex === 3"
         :select="select"
         :action="action"
@@ -42,7 +48,7 @@
         :crew_their="crew_their"/>
 
       <!-- [4] Result -->
-      <action-result-selector
+      <result-selector
         v-if="stepIndex === 4"
         :select="select"
         :action="action"/>
@@ -55,18 +61,20 @@
 <script>
 import Vue from 'vue'
 
-import ActionSourceSelector from './ActionSourceSelector.vue'
-import ActionActionSelector from './ActionActionSelector.vue'
-import ActionTargetSelector from './ActionTargetSelector.vue'
-import ActionResultSelector from './ActionResultSelector.vue'
+import SourceSelector from './SourceSelector.vue'
+import ActionSelector from './ActionSelector.vue'
+import TargetSelector from './TargetSelector.vue'
+import ResultSelector from './ResultSelector.vue'
+import CustomActionSelector from './CustomActionSelector.vue'
 
 export default {
   name: 'ActionModal',
   components: {
-    ActionSourceSelector,
-    ActionActionSelector,
-    ActionTargetSelector,
-    ActionResultSelector
+   SourceSelector,
+   ActionSelector,
+   TargetSelector,
+   ResultSelector,
+   CustomActionSelector
   },
   props: {
     addAction: Function,
@@ -93,6 +101,13 @@ export default {
       this.action = {}
       this.visible = true
     },
+    showCustomAction: function () {
+      this.stepIndex = 2.1
+    },
+    addCustomAction: function (customAction) {
+      this.action.source.actions.push(customAction)
+      this.select(customAction)
+    },
     select: function (selected) {
       switch (this.stepIndex) {
         // Selecting side
@@ -115,7 +130,9 @@ export default {
         // - selected: Action Object { name, target, result }
         // - if there`s no target, jump to result
         case 2:
+        case 2.1:
           this.action.action = selected
+          this.stepIndex = parseInt(this.stepIndex)
           this.stepIndex++
           
           // Target required check:
@@ -134,7 +151,6 @@ export default {
 
           // Result required check:
           if (this.action.action.result === undefined) {
-            this.stepIndex++
             this.select()
           }
 

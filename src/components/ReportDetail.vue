@@ -48,7 +48,7 @@
 import Vue from 'vue'
 
 import ReportHistory from './ReportHistory.vue'
-import ActionModal from './modals/ActionModal.vue'
+import ActionModal from './modals/action/ActionModal.vue'
 
 export default {
   name: 'ReportDetail',
