@@ -1,6 +1,6 @@
 <template>
 
-  <v-ons-list-item :class="'action ' + action.side">
+  <v-ons-list-item :class="`action ${action.side}`" tappable>
     <span class="list-item__title"><strong v-once v-text="action.source.name"></strong></span>
     <span class="list-item__subtitle">
       <span>Took <strong v-once v-text="action.action.name"/> action</span>
