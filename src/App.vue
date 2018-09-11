@@ -12,6 +12,7 @@
       v-if="currentReport"
       :openListPage="openListPage"
       :saveReport="saveReport"
+      :createModel="createModel"
       :reportDetail="currentReport"
       :modelList="modelList"/>
     <add-action-modal/>
@@ -21,6 +22,7 @@
 
 <script>
 import Vue from 'vue'
+import CrewBuilder from './util/CrewBuilder'
 
 import ReportList from './components/ReportList.vue'
 import ReportDetail from './components/ReportDetail.vue'
@@ -60,14 +62,19 @@ export default {
     createReport: function (params) {
       this.openDetailPage({
         recorder: params.discord_id,
-        crew_yours: params.crew_thisside,
-        crew_their: params.crew_opponent,
+        crew_yours: CrewBuilder.parse(params.crew_thisside),
+        crew_their: CrewBuilder.parse(params.crew_opponent),
         history: [[]],
         created: null
       })
     },
     viewReport: function (report) {
       this.openDetailPage(report)
+    },
+    createModel: function (model) {
+      let createdModel = CrewBuilder.generate(model)
+      this.modelList.push(createdModel)
+      return createdModel
     },
     saveReport: function () {
       let savingNewReport = this.currentReport.created === null
@@ -103,7 +110,7 @@ export default {
     },
     syncStorage: function () {
       this.reportList.sort((prev, next) => prev.created < next.created )
-      localStorage && localStorage.setItem('malifaux-report-tool.report-list', JSON.stringify(this.reportList))
+      localStorage && localStorage.setItem('malifaux-tool-report.report-list', JSON.stringify(this.reportList))
     }
   }
 }

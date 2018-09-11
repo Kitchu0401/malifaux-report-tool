@@ -43,7 +43,7 @@
     
     <model-modal
       :addModel="addModel"
-      />
+      :modelList="modelList"/>
   
   </v-ons-page>
 
@@ -65,8 +65,10 @@ export default {
   },
   props: {
     openListPage: Function,
+    createModel: Function,
     saveReport: Function,
-    reportDetail: Object
+    reportDetail: Object,
+    modelList: Array
   },
   data: function () {
     return {
@@ -90,8 +92,8 @@ export default {
       this.reportDetail.history[currentRoundIndex].push(action)
     },
     addModel: function (side, model) {
-      // TODO
-
+      let createdModel = this.createModel(model)
+      this.reportDetail[side].modelList.push(createdModel)
     },
     nextRound: function () {
       this.reportDetail.history.push([])

@@ -43,7 +43,6 @@
 
 <script>
 import Vue from 'vue'
-import CrewParse from '../../util/crewParser'
 
 const SAMPLE_CREW = {
   thisside: `Declared Faction: Arcanists 
@@ -109,8 +108,8 @@ export default {
 
       let params = {
         discord_id: this.discord_id,
-        crew_thisside: CrewParse.parse(this.crew_thisside),
-        crew_opponent: CrewParse.parse(this.crew_opponent)
+        crew_thisside: this.crew_thisside,
+        crew_opponent: this.crew_opponent
       }
 
       Vue.EventBus.$emit('create-report', params)

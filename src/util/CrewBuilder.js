@@ -74,8 +74,55 @@ function addActions () {
   ]
 }
 
+// function process (source) {
+//   return new Promise((resolve, reject) => {
+//     // Parse crew string
+//     let crew = source.trim().split('\n').reduce((result, row, index) => {
+//       let type = getType(row, index)
+//       let value = getValue(row, index)
+//    
+//       if (type === Symbols.FACTION) {
+//         result.faction = value
+//       } else if (type === Symbols.CREW_NAME) {
+//         result.crewName = value
+//       } else if (type === Symbols.LEADER) {
+//         result.leader = value
+//         result.modelList = result.modelList ? result.modelList : []
+//         result.modelList.push(generate({ name: value }))
+//       } else if (type === Symbols.MODEL) {
+//         result.modelList = result.modelList ? result.modelList : []
+//         result.modelList.push(generate({ name: value }))
+//       } else if (type === Symbols.UPGRADE) {
+//         result.modelList[result.modelList.length - 1].upgrades.push({ name: value })
+//       }
+//    
+//       return result
+//     }, {})
+//
+//     // Get registered model information
+//     axios.post('/list', crew.modelList)
+//       .then(result => resolve(result))
+//       .catch(error => console.error(error))
+//   })
+// }
+
+// async function parse (source) {
+//   source.crew_thisside = await process(source.crew_thisside)
+//   source.crew_opponent = await process(source.crew_opponent)
+// 
+//   return source
+// }
+
+function generate (source) {
+  return {
+    name: source.name,
+    upgrades: [],
+    actions: addActions()
+  }
+}
+
 function parse (source) {
-  return source.split('\n').reduce((result, row, index) => {
+  return source.trim().split('\n').reduce((result, row, index) => {
     let type = getType(row, index)
     let value = getValue(row, index)
   
@@ -86,10 +133,10 @@ function parse (source) {
     } else if (type === Symbols.LEADER) {
       result.leader = value
       result.modelList = result.modelList ? result.modelList : []
-      result.modelList.push({ name: value, upgrades: [], actions: addActions() })
+      result.modelList.push(generate({ name: value }))
     } else if (type === Symbols.MODEL) {
       result.modelList = result.modelList ? result.modelList : []
-      result.modelList.push({ name: value, upgrades: [], actions: addActions() })
+      result.modelList.push(generate({ name: value }))
     } else if (type === Symbols.UPGRADE) {
       result.modelList[result.modelList.length - 1].upgrades.push({ name: value })
     }
@@ -98,4 +145,4 @@ function parse (source) {
   }, {})
 }
 
-export default { parse }
+export default { generate, parse }
