@@ -35,10 +35,15 @@
 
     <action-modal
       :addAction="addAction"
+      :callAddModelModal="callAddModelModal"
       :nextRound="nextRound"
       :currentRoundIndex="currentRoundIndex"
       :crew_yours="reportDetail.crew_yours"
       :crew_their="reportDetail.crew_their"/>
+    
+    <model-modal
+      :addModel="addModel"
+      />
   
   </v-ons-page>
 
@@ -49,12 +54,14 @@ import Vue from 'vue'
 
 import ReportHistory from './ReportHistory.vue'
 import ActionModal from './modals/action/ActionModal.vue'
+import ModelModal from './modals/model/ModelModal.vue'
 
 export default {
   name: 'ReportDetail',
   components: {
     ReportHistory,
-    ActionModal
+    ActionModal,
+    ModelModal
   },
   props: {
     openListPage: Function,
@@ -76,8 +83,15 @@ export default {
     callAddActionModal: function () {
       Vue.EventBus.$emit('open-modal-add-action')
     },
+    callAddModelModal: function (side) {
+      Vue.EventBus.$emit('open-modal-add-model', side)
+    },
     addAction: function (currentRoundIndex, action) {
       this.reportDetail.history[currentRoundIndex].push(action)
+    },
+    addModel: function (side, model) {
+      // TODO
+
     },
     nextRound: function () {
       this.reportDetail.history.push([])

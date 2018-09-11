@@ -5,13 +5,15 @@
       v-if="!currentReport"
       :viewReport="viewReport"
       :deleteReport="deleteReport"
-      :reportList="reportList"/>
+      :reportList="reportList"
+      :modelList="modelList"/>
 
     <ReportDetail
       v-if="currentReport"
       :openListPage="openListPage"
       :saveReport="saveReport"
-      :reportDetail="currentReport"/>
+      :reportDetail="currentReport"
+      :modelList="modelList"/>
     <add-action-modal/>
 
   </div>
@@ -35,7 +37,7 @@ export default {
 
     // ReportList initialize
     if (localStorage) {
-      let reportList = JSON.parse(localStorage.getItem('malifaux-report-tool.report-list'))
+      let reportList = JSON.parse(localStorage.getItem('malifaux-tool-report.report-list'))
       this.reportList = Array.isArray(reportList) ? reportList : []
       
       console.log('Found saved report lists:', this.reportList)
@@ -44,7 +46,8 @@ export default {
   data: function () {
     return {
       currentReport: null,
-      reportList: []
+      reportList: [],
+      modelList: []
     }
   },
   methods: {

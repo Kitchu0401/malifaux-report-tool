@@ -2,9 +2,10 @@
   
   <v-ons-dialog
     cancelable
+    :class="'dialog-action'"
     :visible.sync="visible">
 
-    <section style="padding: 8px;">
+    <section>
       <!-- Fixed list items -->
       <v-ons-list v-if="stepIndex === 0">
         <v-ons-list-item modifier="nodivider">
@@ -12,6 +13,12 @@
         </v-ons-list-item>
         <v-ons-list-item modifier="nodivider">
           <v-ons-button modifier="large" style="margin: 0px;" @click="select('crew_their')">Add their action</v-ons-button>
+        </v-ons-list-item>
+        <v-ons-list-item modifier="nodivider">
+          <v-ons-button modifier="large" style="margin: 0px;" @click="clickAddModel('crew_yours')">Add my model</v-ons-button>
+        </v-ons-list-item>
+        <v-ons-list-item modifier="nodivider">
+          <v-ons-button modifier="large" style="margin: 0px;" @click="clickAddModel('crew_their')">Add their model</v-ons-button>
         </v-ons-list-item>
         <v-ons-list-item modifier="nodivider">
           <v-ons-button modifier="large" style="margin: 0px;" @click="clickNextRound()">Next Round</v-ons-button>
@@ -78,6 +85,7 @@ export default {
   },
   props: {
     addAction: Function,
+    callAddModelModal: Function,
     nextRound: Function,
     currentRoundIndex: Number,
     crew_yours: Object,
@@ -172,6 +180,10 @@ export default {
       this.addAction(this.currentRoundIndex, this.action)
       this.visible = false
     },
+    clickAddModel: function (side) {
+      this.visible = false
+      this.callAddModelModal(side)
+    },
     clickNextRound: function () {
       this.nextRound()
       this.visible = false
@@ -179,3 +191,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.dialog-action >>> .dialog {
+  max-height: 80%;
+  overflow-y: scroll;
+}
+</style>
