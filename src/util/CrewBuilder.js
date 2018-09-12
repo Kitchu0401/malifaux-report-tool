@@ -18,10 +18,10 @@ function getType (row, index) {
 function getValue (row, index) {
   try {
     switch (index) {
-      case 0:   return /Faction\:([ a-zA-Z]*)/g.exec(row)[1].trim()
-      case 1:   return /Crew Name\:(\D*)[0-9]*ss/g.exec(row)[1].trim()
-      case 2:   return /Leader\:([ a-zA-Z]*)- Cache/g.exec(row)[1].trim()
-      default:  return /([ a-zA-Z]*)([0-9]*)ss/g.exec(row)[1].trim()
+      case 0:   return /Faction\:([\w\W]*)/g.exec(row)[1].trim()
+      case 1:   return /Crew Name\:([\w\W]*) [0-9]*ss/g.exec(row)[1].trim()
+      case 2:   return /Leader\:([\w\W]*)- Cache/g.exec(row)[1].trim()
+      default:  return /([\w\W]*) [0-9]*ss/g.exec(row)[1].trim()
       // default:  
       //   let executed = /([ a-zA-Z]*)([0-9]*)ss/g.exec(row)
       //   return {
