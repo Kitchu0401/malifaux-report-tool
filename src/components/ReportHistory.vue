@@ -4,7 +4,8 @@
     <report-history-action
       v-for="(action, actionIndex) in round"
       :key="actionIndex"
-      :action="action"/>
+      :action="action"
+      :callAddMemoModal="callAddMemoModal"/>
   </v-ons-list>
 
 </template>
@@ -18,7 +19,8 @@ export default {
     ReportHistoryAction
   },
   props: {
-    round: Array
+    round: Array,
+    callAddMemoModal: Function
   }
 }
 </script>

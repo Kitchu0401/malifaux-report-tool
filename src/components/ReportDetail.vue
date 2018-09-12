@@ -13,7 +13,9 @@
     <v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="currentRoundIndex">
       <v-ons-carousel-item v-for="(round, roundIndex) in reportDetail.history" :key="roundIndex" :style="{backgroundColor: '#fff'}">
 
-        <report-history :round="round"/>
+        <report-history
+          :round="round"
+          :callAddMemoModal="callAddMemoModal"/>
 
       </v-ons-carousel-item>
     </v-ons-carousel>
@@ -44,6 +46,8 @@
     <model-modal
       :addModel="addModel"
       :modelList="modelList"/>
+    
+    <memo-modal/>
   
   </v-ons-page>
 
@@ -55,13 +59,15 @@ import Vue from 'vue'
 import ReportHistory from './ReportHistory.vue'
 import ActionModal from './modals/action/ActionModal.vue'
 import ModelModal from './modals/model/ModelModal.vue'
+import MemoModal from './modals/memo/MemoModal.vue'
 
 export default {
   name: 'ReportDetail',
   components: {
     ReportHistory,
     ActionModal,
-    ModelModal
+    ModelModal,
+    MemoModal
   },
   props: {
     openListPage: Function,
@@ -87,6 +93,11 @@ export default {
     },
     callAddModelModal: function (side) {
       Vue.EventBus.$emit('open-modal-add-model', side)
+    },
+    callAddMemoModal: function (action) {
+      // TODO
+      return
+      Vue.EventBus.$emit('open-modal-add-memo', action)
     },
     addAction: function (currentRoundIndex, action) {
       this.reportDetail.history[currentRoundIndex].push(action)

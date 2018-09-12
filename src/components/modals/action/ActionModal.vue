@@ -195,6 +195,6 @@ export default {
 <style scoped>
 .dialog-action >>> .dialog {
   max-height: 80%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>
