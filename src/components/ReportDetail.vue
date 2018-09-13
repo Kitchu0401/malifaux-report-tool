@@ -45,7 +45,7 @@
     
     <model-modal
       :addModel="addModel"
-      :modelList="modelList"/>
+      :metaModelList="metaModelList"/>
     
     <memo-modal/>
   
@@ -74,7 +74,7 @@ export default {
     createModel: Function,
     saveReport: Function,
     reportDetail: Object,
-    modelList: Array
+    metaModelList: Array
   },
   data: function () {
     return {

@@ -8,16 +8,21 @@
     <v-ons-list style="height: 140px;">
       <!-- Custom action name -->
       <v-ons-list-header>Model name</v-ons-list-header>
-      <v-ons-list-item><v-ons-input v-model="model.name"/></v-ons-list-item>
+      <v-ons-list-item><v-ons-input
+        placeholder="2 characters at least!"
+        v-model="model.name"/>
+    </v-ons-list-item>
 
-      <!-- Filtered model list -->
+      <!--
       <v-ons-list-item
           tappable modifier="nodivider"
           @click="clickAddCustomModel">
         Add custom model
       </v-ons-list-item>
+      -->
     </v-ons-list>
 
+    <!-- Filtered model list -->
     <v-ons-list>
       <v-ons-list-item
           tappable modifier="nodivider"
@@ -38,7 +43,7 @@ export default {
   name: 'ModelModal',
   props: {
     addModel: Function,
-    modelList: Array
+    metaModelList: Array
   },
   mounted: function () {
     // Global event mapping
@@ -55,8 +60,11 @@ export default {
   },
   computed: {
     filteredModelList: function () {
-      return this.modelList.filter(model => {
-        return !this.model.name || model.name.toLowerCase().indexOf(this.model.name.toLowerCase()) >= 0
+      // Show list only when at least 2 characters provided
+      if (this.model.name.trim().length < 2) return []
+
+      return this.metaModelList.filter(model => {
+        return model.name.toLowerCase().indexOf(this.model.name.trim().toLowerCase()) >= 0
       }).sort()
     }
   },

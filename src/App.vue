@@ -6,7 +6,7 @@
       :viewReport="viewReport"
       :deleteReport="deleteReport"
       :reportList="reportList"
-      :modelList="modelList"/>
+      :modelList="metaModelList"/>
 
     <ReportDetail
       v-if="currentReport"
@@ -14,7 +14,7 @@
       :saveReport="saveReport"
       :createModel="createModel"
       :reportDetail="currentReport"
-      :modelList="modelList"/>
+      :metaModelList="metaModelList"/>
     <add-action-modal/>
 
   </div>
@@ -23,6 +23,7 @@
 <script>
 import Vue from 'vue'
 import CrewBuilder from './util/CrewBuilder'
+import metaModelList from './data/modelNames.json'
 
 import ReportList from './components/ReportList.vue'
 import ReportDetail from './components/ReportDetail.vue'
@@ -37,6 +38,11 @@ export default {
     // Global event mapping
     Vue.EventBus.$on('create-report', this.createReport)
 
+    // MetaModelList initialize
+    Array.isArray(metaModelList) && metaModelList.forEach(metaModelName => {
+      this.metaModelList.push({ name: metaModelName })
+    })
+
     // ReportList initialize
     if (localStorage) {
       let reportList = JSON.parse(localStorage.getItem('malifaux-tool-report.report-list'))
@@ -49,7 +55,7 @@ export default {
     return {
       currentReport: null,
       reportList: [],
-      modelList: []
+      metaModelList: []
     }
   },
   methods: {
@@ -72,9 +78,12 @@ export default {
       this.openDetailPage(report)
     },
     createModel: function (model) {
-      let createdModel = CrewBuilder.generate(model)
-      this.modelList.push(createdModel)
-      return createdModel
+      // let createdModel = CrewBuilder.generate(model)
+      // if (metaModelList.every(metaModel => metaModel.name !== model.name)) {
+      //   this.metaModelList.push(model.name)
+      // }
+      
+      return CrewBuilder.generate(model)
     },
     saveReport: function () {
       let savingNewReport = this.currentReport.created === null
